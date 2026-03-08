@@ -49,7 +49,8 @@ public interface ServeItemMapper extends BaseMapper<ServeItem> {
      * @param id 服务id
      * @return 服务项
      */
-    ServeItem queryServeItemByServeId(@Param("id") Long id);
+    @Select("SELECT * FROM serve_item WHERE serve_id = #{id}")
+    List<ServeItem> queryServeItemByServeId(@Param("id") Long id);
 
     /**
      * 查询启用状态的服务项目录

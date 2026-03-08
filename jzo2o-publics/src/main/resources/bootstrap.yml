@@ -42,6 +42,8 @@ spring:
           - data-id: shared-redis-cluster.yaml # 共享redis集群配置
             refresh: false
 
+
+
 #################     项目独有配置     #################
 swagger:
   enable: true
@@ -61,3 +63,8 @@ logging:
     org.apache.http: info #es请求日志
 feign:
   enable: true
+
+#################     高德地图配置     #################
+#amap:
+#  enable: true
+#  key: 1e822c01a7792e78d167358ddb9ac8cb

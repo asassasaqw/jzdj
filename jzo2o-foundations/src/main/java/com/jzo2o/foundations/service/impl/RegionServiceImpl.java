@@ -10,18 +10,23 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.jzo2o.api.foundations.dto.response.RegionSimpleResDTO;
 import com.jzo2o.common.expcetions.ForbiddenOperationException;
 import com.jzo2o.common.model.PageResult;
+import com.jzo2o.common.utils.CollUtils;
 import com.jzo2o.foundations.constants.RedisConstants;
 import com.jzo2o.foundations.enums.FoundationStatusEnum;
 import com.jzo2o.foundations.mapper.CityDirectoryMapper;
 import com.jzo2o.foundations.mapper.RegionMapper;
+import com.jzo2o.foundations.mapper.ServeMapper;
 import com.jzo2o.foundations.model.domain.CityDirectory;
 import com.jzo2o.foundations.model.domain.Region;
+import com.jzo2o.foundations.model.domain.Serve;
 import com.jzo2o.foundations.model.dto.request.RegionPageQueryReqDTO;
 import com.jzo2o.foundations.model.dto.request.RegionUpsertReqDTO;
 import com.jzo2o.foundations.model.dto.response.RegionResDTO;
+import com.jzo2o.foundations.model.dto.response.ServeResDTO;
 import com.jzo2o.foundations.service.IConfigRegionService;
 import com.jzo2o.foundations.service.IRegionService;
 import com.jzo2o.mysql.utils.PageUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,6 +45,8 @@ public class RegionServiceImpl extends ServiceImpl<RegionMapper, Region> impleme
     private IConfigRegionService configRegionService;
     @Resource
     private CityDirectoryMapper cityDirectoryMapper;
+    @Autowired
+    private ServeMapper serveMapper;
 
 
     /**
@@ -151,7 +158,11 @@ public class RegionServiceImpl extends ServiceImpl<RegionMapper, Region> impleme
             throw new ForbiddenOperationException("草稿或禁用状态方可启用");
         }
         //如果需要启用区域，需要校验该区域下是否有上架的服务
-        //todo
+        List<Serve> serves = serveMapper.queryByRegionIdAndSaleStatus(id, FoundationStatusEnum.ENABLE.getStatus());
+        if (CollUtils.isEmpty(serves)) {
+            throw new ForbiddenOperationException("该区域下不存在上架的服务");
+        }
+
 
         //更新启用状态
         LambdaUpdateWrapper<Region> updateWrapper = Wrappers.<Region>lambdaUpdate()
@@ -180,8 +191,10 @@ public class RegionServiceImpl extends ServiceImpl<RegionMapper, Region> impleme
         }
 
         //如果禁用区域下有上架的服务则无法禁用
-        //todo
-
+        List<Serve> serves = serveMapper.queryByRegionIdAndSaleStatus(id, FoundationStatusEnum.ENABLE.getStatus());
+        if(CollUtils.isNotEmpty(serves)){
+            throw new ForbiddenOperationException("该区域下有上架的服务");
+        }
         //更新禁用状态
         LambdaUpdateWrapper<Region> updateWrapper = Wrappers.<Region>lambdaUpdate()
                 .eq(Region::getId, id)

@@ -82,6 +82,13 @@
 <!--            <groupId>com.jzo2o</groupId>-->
 <!--            <artifactId>jzo2o-xxl-job</artifactId>-->
 <!--        </dependency>-->
+
+<!--jzo2o-thirdparty -->
+        <dependency>
+            <groupId>com.jzo2o</groupId>
+            <artifactId>jzo2o-thirdparty</artifactId>
+        </dependency>
+
     </dependencies>
 
     <build>
