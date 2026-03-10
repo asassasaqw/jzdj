@@ -16,6 +16,7 @@ import com.jzo2o.foundations.model.domain.ServeItem;
 import com.jzo2o.foundations.model.dto.request.ServePageQueryReqDTO;
 import com.jzo2o.foundations.model.dto.request.ServeUpsertReqDTO;
 import com.jzo2o.foundations.model.dto.response.ServeAggregationSimpleResDTO;
+import com.jzo2o.foundations.model.dto.response.ServeAggregationTypeSimpleResDTO;
 import com.jzo2o.foundations.model.dto.response.ServeCategoryResDTO;
 import com.jzo2o.foundations.model.dto.response.ServeResDTO;
 import com.jzo2o.foundations.service.IServeService;
@@ -183,5 +184,17 @@ public class ServeServiceImpl extends ServiceImpl<ServeMapper, Serve> implements
         dto.setUnit(serveItem.getUnit());
 
         return dto;
+    }
+
+    @Override
+    public List<ServeAggregationTypeSimpleResDTO> serveTypeList(Long regionId) {
+        //1 对区域进行校验
+        Region region = regionMapper.selectById(regionId);
+        if (ObjectUtil.isNull(region) || region.getActiveStatus() != 2) {
+            return Collections.emptyList();
+        }
+
+        //2 查询当前区域下上架服务对应的分类
+        return baseMapper.findServeTypeListByRegionId(regionId);
     }
 }

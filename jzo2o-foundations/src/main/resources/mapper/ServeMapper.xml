@@ -72,4 +72,22 @@
           and s.sale_status = 2
         order by s.update_time desc
     </select>
+
+
+    <select id="findServeTypeListByRegionId"
+            resultType="com.jzo2o.foundations.model.dto.response.ServeAggregationTypeSimpleResDTO"
+            parameterType="java.lang.Long">
+        select
+            st.id as serveTypeId,
+            st.img as serveTypeImg,
+            st.sort_num as serveTypeSortNum,
+            st.name as serveTypeName
+        from serve s
+                 inner join serve_item si on s.serve_item_id = si.id
+                 inner join serve_type st on si.serve_type_id = st.id
+        where s.region_id = #{regionId}
+          and s.sale_status = 2
+          and st.active_status = 2
+        group by st.id
+    </select>
 </mapper>
