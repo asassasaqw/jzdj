@@ -1,14 +1,12 @@
 package com.jzo2o.foundations.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.jzo2o.api.foundations.dto.response.ServeAggregationResDTO;
 import com.jzo2o.common.model.PageResult;
 import com.jzo2o.foundations.model.domain.Serve;
 import com.jzo2o.foundations.model.dto.request.ServePageQueryReqDTO;
 import com.jzo2o.foundations.model.dto.request.ServeUpsertReqDTO;
-import com.jzo2o.foundations.model.dto.response.ServeAggregationSimpleResDTO;
-import com.jzo2o.foundations.model.dto.response.ServeAggregationTypeSimpleResDTO;
-import com.jzo2o.foundations.model.dto.response.ServeCategoryResDTO;
-import com.jzo2o.foundations.model.dto.response.ServeResDTO;
+import com.jzo2o.foundations.model.dto.response.*;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -67,4 +65,23 @@ public interface IServeService extends IService<Serve> {
      * @return 当前区域下上架服务对应的分类
      */
     List<ServeAggregationTypeSimpleResDTO> serveTypeList(Long regionId);
+
+
+    /**
+     * 服务搜索
+     *
+     * @param cityCode    城市编码
+     * @param keyword     关键词
+     * @param serveTypeId 服务类型id
+     * @return 服务项目信息
+     */
+    List<ServeSimpleResDTO> search(String cityCode, String keyword, Long serveTypeId);
+
+    /**
+     * 服务搜索
+     *
+     * @param serveId    服务Id
+     * @return 服务信息
+     */
+    ServeAggregationResDTO findById(Long serveId);
 }

@@ -29,6 +29,7 @@ import com.jzo2o.mysql.utils.PageUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -183,6 +184,15 @@ public class RegionServiceImpl extends ServiceImpl<RegionMapper, Region> impleme
      * @param id 区域id
      */
     @Override
+//    @CacheEvict(cacheNames = RedisConstants.CacheName.JZ_CACHE, key = "'ACTIVE_REGIONS'")
+    @Caching(
+            evict = {
+                    //删除开通区域列表
+                    @CacheEvict(value = RedisConstants.CacheName.JZ_CACHE, key = "'ACTIVE_REGIONS'"),
+                    //删除首页服务列表
+                    @CacheEvict(value = RedisConstants.CacheName.SERVE_ICON,key = "#id")
+            }
+    )
     public void deactivate(Long id) {
         //区域信息
         Region region = baseMapper.selectById(id);
