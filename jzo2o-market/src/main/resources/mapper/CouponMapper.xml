@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jzo2o.market.mapper.CouponMapper">
+
+    <select id="countByActivityIdList" resultType="com.jzo2o.market.model.dto.response.CountResDTO">
+        select activity_id, count(*) as num
+        from coupon
+        where activity_id IN
+        <foreach collection="activityIdList" item="activityId" open="(" close=")" separator=",">
+            #{activityId}
+        </foreach>
+        group by activity_id
+    </select>
+</mapper>

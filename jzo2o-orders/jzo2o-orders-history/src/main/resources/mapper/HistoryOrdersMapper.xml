@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jzo2o.orders.history.mapper.HistoryOrdersMapper">
+    <select id="migrate" parameterType="java.util.Map" resultType="com.jzo2o.orders.history.model.domain.HistoryOrders">
+        select distinct hos.*
+        from history_orders_sync hos
+                 LEFT JOIN history_orders ho on hos.id=ho.id
+        where <![CDATA[ hos.sort_time >= #{yesterDayStartTime}]]> and <![CDATA[ hos.sort_time <= #{yesterDayEndTime} ]]>
+        and ho.id is null
+            limit #{offset},#{perNum}
+    </select>
+</mapper>

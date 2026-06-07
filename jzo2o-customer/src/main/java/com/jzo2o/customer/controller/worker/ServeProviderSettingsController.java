@@ -34,6 +34,7 @@ public class ServeProviderSettingsController {
     @GetMapping
     @ApiOperation("获取设置")
     public ServeProviderSettingsGetResDTO getServeScope() {
+
         return serveProviderSettingsService.getServeScope();
     }
 
